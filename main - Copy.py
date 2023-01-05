@@ -106,17 +106,40 @@ while True:
             if error_x > 5 and error_x < 20:#if star x pos greater than +5, move camera right
                # text#SerialObj.write(b'R')
                 print('print small move right')
-                motorCommand = b'R'
+                horz_motorCommand = b'R'
             elif error_x >= 20:
-                motorCommand = b'r'
+                horz_motorCommand = b'r'
                 print("big right move")
 
             elif error_x < -5 and error_x >-20:
                 print("small move left")
-                motorCommand = b'L'
+                horz_motorCommand = b'L'
             elif error_x <= -20:
                 print("big left move")
-                motorCommand = b'l'
+                horz_motorCommand = b'l'
+            else:
+                horz_motorCommand = None # dont need to move camera
+            
+            # check if horizontal correction necessary
+            if horz_motorCommand:
+                # check if motor command is big movment    
+                if horz_motorCommand.isupper():
+                    deltaX = 10 # THOMAS NEED TO DETERMINE THIS NUMBER
+                    move_duration = 1 # seconds. THOMAS NEED TO DETERMINE THIS
+                else:
+                    deltaX = 5 # THOMAS NEED TO DETERMINE THIS NUMBER
+                    move_duration = 0.5 # seconds. THOMAS NEED TO DETERMINE THIS
+                
+                # compute number of commands that need to be sent to motor
+                nHorizontal_moves = error_x / deltaX
+
+                # send movement commands to motor
+                for _ in range(nHorizontal_moves):
+                    SerialObj.write(horz_motorCommand)
+
+                # wait until motor is done moving
+                time.sleep(nHorizontal_moves*move_duration)
+                
             # YYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYY direction
             if error_y > 5 and error_y < 20:#if star y pos greater than +5, move camera right
                # text#SerialObj.write(b'A')
