@@ -18,11 +18,12 @@ const int stepPin_focus = 4;  //3 for y, 4 for z
 const int enablePin = 8;
 
 int numberOfSteps = 5000;
+int smallsteps = 2500;
 int teststeps = 8000;
 int faststeps = 20000;
 //byte ledPin = 13;
 int pulseWidthMicros = 20;  // microseconds
-int millisbetweenSteps = 1.5; // milliseconds - or try 1000 for slower steps
+int millisbetweenSteps = 1; // milliseconds - or try 1000 for slower steps
 
 int fastbetweenstep = 0.8;
 
@@ -57,11 +58,11 @@ void loop()
       {  
         
         //drive the motor up
-        case 'U':  //up motor movment from camera
+        case 'u':  //up motor movment from camera
         digitalWrite(dirPin_tilt,HIGH);
         digitalWrite(enablePin,LOW);
-        Serial.println('U');
-       for(int n = 0; n < numberOfSteps; n++) {
+        Serial.println('u');
+       for(int n = 0; n < smallsteps; n++) {
          digitalWrite(stepPin_tilt, HIGH);
          //delayMicroseconds(pulseWidthMicros); // this line is probably unnecessary
          digitalWrite(stepPin_tilt, LOW);
@@ -72,10 +73,10 @@ void loop()
                    break;
 
 //also drive the motor up but faster
-        case 'u':  //up motor movment from gui
+        case 'U':  //up motor movment from gui
         digitalWrite(dirPin_tilt,HIGH);
         digitalWrite(enablePin,LOW);
-        Serial.println('u');
+        Serial.println('U');
        for(int n = 0; n < numberOfSteps; n++) {
          digitalWrite(stepPin_tilt, HIGH);
          //delayMicroseconds(pulseWidthMicros); // this line is probably unnecessary
@@ -87,11 +88,11 @@ void loop()
                    break;
        
         
-        case 'D': //down motor movment from camera
+        case 'd': //down motor movment from camera
         digitalWrite(dirPin_tilt,LOW);
         digitalWrite(enablePin,LOW);
-        Serial.println('D');
-       for(int n = 0; n < numberOfSteps; n++) {
+        Serial.println('d');
+       for(int n = 0; n < smallsteps; n++) {
          digitalWrite(stepPin_tilt, HIGH);
          //delayMicroseconds(pulseWidthMicros); // this line is probably unnecessary
          digitalWrite(stepPin_tilt, LOW);
@@ -101,10 +102,10 @@ void loop()
  }
                    break;
   //also drive the motor down but faster 
-        case 'd': //down motor movment from camera
+        case 'D': //down motor movment from camera
         digitalWrite(dirPin_tilt,LOW);
         digitalWrite(enablePin,LOW);
-        Serial.println('d');
+        Serial.println('D');
        for(int n = 0; n < numberOfSteps; n++) {
          digitalWrite(stepPin_tilt, HIGH);
          //delayMicroseconds(pulseWidthMicros); // this line is probably unnecessary
@@ -124,7 +125,7 @@ void loop()
          delayMicroseconds(pulseWidthMicros); // this line is probably unnecessary
          digitalWrite(stepPin_pan, LOW);
     
-          delay(millisbetweenSteps);
+          delay(fastbetweenstep);
  }
                    break;
         //also drive the motor left but faster             
@@ -132,19 +133,19 @@ void loop()
         digitalWrite(dirPin_pan,HIGH);
         digitalWrite(enablePin,LOW);
         Serial.print('l');
-       for(int n = 0; n < numberOfSteps; n++) {
+       for(int n = 0; n < smallsteps; n++) {
          digitalWrite(stepPin_pan, HIGH);
          //delayMicroseconds(pulseWidthMicros); // this line is probably unnecessary
          digitalWrite(stepPin_pan, LOW);
     
-          delay(fastbetweenstep);
+          delay(millisbetweenSteps);
  }
                    break;
-        case 'R': //right motor movment from camera
+        case 'r': //right motor movment from camera
         digitalWrite(dirPin_pan,LOW);
         digitalWrite(enablePin,LOW);
-        Serial.print('U');
-       for(int n = 0; n < numberOfSteps; n++) {
+        Serial.print('r');
+       for(int n = 0; n < smallsteps; n++) {
          digitalWrite(stepPin_pan, HIGH);
          delayMicroseconds(pulseWidthMicros); // this line is probably unnecessary
          digitalWrite(stepPin_pan, LOW);
@@ -153,10 +154,10 @@ void loop()
  }          
                    break;
     //also drive the motor right but faster                 
-        case 'r': //right motor movment from camera
+        case 'R': //right motor movment from camera
         digitalWrite(dirPin_pan,LOW);
         digitalWrite(enablePin,LOW);
-        Serial.print('U');
+        Serial.print('R');
        for(int n = 0; n < numberOfSteps; n++) {
          digitalWrite(stepPin_pan, HIGH);
          //delayMicroseconds(pulseWidthMicros); // this line is probably unnecessary
@@ -174,7 +175,7 @@ void loop()
         // delayMicroseconds(pulseWidthMicros); // this line is probably unnecessary
          digitalWrite(stepPin_focus, LOW);
     
-          delay(.9);
+          delay(1);
  }
                    break;  
          case 'B':  //focus other direction
@@ -186,7 +187,7 @@ void loop()
         // delayMicroseconds(pulseWidthMicros); // this line is probably unnecessary
          digitalWrite(stepPin_focus, LOW);
     
-          delay(.9);
+          delay(1);
  }
                    break;                             
         default:
