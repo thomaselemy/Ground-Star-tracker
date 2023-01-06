@@ -9,10 +9,10 @@ from collections import deque
 import sys
 import time
 #import pyserial
-from buttons import create_GUI
+#from buttons import create_GUI
 import serial
 
-#SerialObj = serial.Serial('COM7', 9600) #open serial port
+SerialObj = serial.Serial('COM9', 9600) #open serial port
 
 '''SerialObj.baudrate = 9600  # set Baud rate to 9600
 SerialObj.bytesize = 8     # Number of data bits = 8
@@ -49,15 +49,18 @@ OPENCV_OBJECT_TRACKERS = {
     "medianflow": cv2.legacy.TrackerMedianFlow_create,
     "mosse": cv2.legacy.TrackerMOSSE_create
 }
-tracker = OPENCV_OBJECT_TRACKERS["csrt"]()  # Initialize the tracker
+tracker = OPENCV_OBJECT_TRACKERS["medianflow"]()  # Initialize the tracker
 
 box = None
 position = deque()
 print("[INFO] Initialization")
 state = 0
-
+tstart = None
+tstart2 = None
+elapsed_duration = 0
+elapsed_duration2 = 0
 video_frame_rate = vs.get(cv2.CAP_PROP_FPS)  # Obtain video frame rate
-create_GUI()
+#create_GUI()
 while True:
     (grabbed, frame) = vs.read()  # Loop frame by frame
     if frame is None:  # End if there is no frame left
@@ -81,110 +84,93 @@ while True:
             error_x=frame_center_x-center_x
             error_y=frame_center_y-center_y
 
-            integral_x=integral_x+error_x
-            integral_y=integral_y+error_y
 
-            differential_x= prev_x+error_x
-            differential_y= prev_y=error_y
-            #print('center x pos=', center_x)
-            #print('center y pos=', center_y)
-            print('error x pos=', error_x)
-
-            prev_x=error_x
-            prev_y=error_y
-
-            valx=Px*error_x +Dx*differential_x + integral_x
-            valy=Px*error_y +Dx*differential_y + integral_y
-
-            valx=round(valx,2)
-            valy=round(valy,2)
 
             nMovementx = error_x / pixelmovement
             nMovementy = error_y / pixelmovement
             #print('pixelerrorx=',error_x,'valx=',valx)
             #print('pixelerrory=',error_y, 'valy=', valy)
-            if error_x > 5 and error_x < 20:#if star x pos greater than +5, move camera right
-               # text#SerialObj.write(b'R')
+            '''if error_x > 5 and error_x < 20:  # if star x pos greater than +5 and less than 20, move camera slowly right
+                # text#SerialObj.write(b'R')
                 print('print small move right')
-                horz_motorCommand = b'R'
+                horz_motorCommand = b'l'
             elif error_x >= 20:
-                horz_motorCommand = b'r'
+                horz_motorCommand = b'L'
                 print("big right move")
 
-            elif error_x < -5 and error_x >-20:
+            elif error_x < -5 and error_x > -20:
                 print("small move left")
-                horz_motorCommand = b'L'
+                horz_motorCommand = b'r'
             elif error_x <= -20:
                 print("big left move")
-                horz_motorCommand = b'l'
+                horz_motorCommand = b'R'
             else:
-                horz_motorCommand = None # dont need to move camera
-            
-            # check if horizontal correction necessary
+                horz_motorCommand = None  # dont need to move camera
+
+                # check if horizontal correction necessary
             if horz_motorCommand:
-                # check if motor command is big movment    
+                # check if motor command is small movment
                 if horz_motorCommand.isupper():
-                    deltaX = 10 # THOMAS NEED TO DETERMINE THIS NUMBER
-                    move_duration = 1 # seconds. THOMAS NEED TO DETERMINE THIS
+                    deltaX = 4  # THOMAS NEED TO DETERMINE THIS NUMBER
+                    move_duration = 0.1  # seconds. THOMAS NEED TO DETERMINE THIS
                 else:
-                    deltaX = 5 # THOMAS NEED TO DETERMINE THIS NUMBER
-                    move_duration = 0.5 # seconds. THOMAS NEED TO DETERMINE THIS
-                
+                    deltaX = 20  # THOMAS NEED TO DETERMINE THIS NUMBER BIG MOVEMENTS
+                    move_duration = 0.2  # seconds. THOMAS NEED TO DETERMINE THIS
+                if tstart:
+                    elapsed_duration = time.time() - tstart
                 # compute number of commands that need to be sent to motor
-                nHorizontal_moves = error_x / deltaX
+                nHorizontal_moves = round(abs(error_x) / deltaX)
+                if elapsed_duration > 2: #nHorizontal_moves * move_duration:
+                    tstart = None
+                if not tstart:
 
-                # send movement commands to motor
-                for _ in range(nHorizontal_moves):
-                    SerialObj.write(horz_motorCommand)
+                    tstart = time.time()
+                    # send movement commands to motor
+                    for _ in range(nHorizontal_moves):
+                            SerialObj.write(horz_motorCommand)
+                            print("move right/left")'''
 
-                # wait until motor is done moving
-                time.sleep(nHorizontal_moves*move_duration)
-                
-            # YYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYY direction
-            if error_y > 5 and error_y < 20:#if star y pos greater than +5, move camera right
-               # text#SerialObj.write(b'A')
-                print('print small move right')
-            elif error_y >= 20:
-                print("big right move")
+            #  yyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy movement
+            if error_y > 5 and error_y < 20:  # if star y pos greater than +5 and less than 20, move camera down
+                # text#SerialObj.write(b'R')
+                print('print small down')
+                vert_motorCommand = b'd'
+            elif error_x >= 20:
+                vert_motorCommand = b'D'
+                print("big down move")
 
-            elif error_y < -5 and error_y >-20:
-                print("small move left")
+            elif error_y < -5 and error_y > -20:# if star y pos greater than +5 and less than 20, move camera down
+                print("small move up")
+                vert_motorCommand = b'u'
+            elif error_y <= -20:
+                print("big down move")
+                vert_motorCommand = b'U'
+            else:
+                vert_motorCommand = None  # dont need to move camera
 
+                # check if vertical correction necessary
+            if vert_motorCommand:
+                # check if motor command is small movment
+                if vert_motorCommand.isupper():
+                    deltaY = 6  # THOMAS NEED TO DETERMINE THIS NUMBER
+                    move_duration2 = 0.1  # seconds. THOMAS NEED TO DETERMINE THIS
+                else:
+                    deltaY = 8  # THOMAS NEED TO DETERMINE THIS NUMBER BIG MOVEMENTS
+                    move_duration2 = 0.2  # seconds. THOMAS NEED TO DETERMINE THIS
+                if tstart2:
+                    elapsed_duration2 = time.time() - tstart2
+                # compute number of commands that need to be sent to motor
+                nVertical_moves = round(abs(error_y) / deltaY)
+                if elapsed_duration2 > 10: #nVertical_moves * move_duration2:
+                    tstart2 = None
+                if not tstart2:
 
-            '''
-             elif error_x < -5 and error_x >-20:
-                print("small move left")
-                        elif error_x >= 20:
-                print("big move")
-                
-                
-            '''
+                    tstart2 = time.time()
+                    # send movement commands to motor
+                    for _ in range(nVertical_moves):
+                        SerialObj.write(vert_motorCommand)
+                        print("move up/down")
 
-
-
-            if error_y > 5:
-
-
-
-                if abs(valx) > 0.5: #if star y pos less than t5, move camera left
-                    sign = valx / abs(valx)
-                    valx = 0.5 * sign
-                #print('valuex', valx)
-                #ser.setposx(valx)
-
-            #if abs(error_y) < 20:
-                #ser.setdcy(0)
-                #print('erry <20')
-            #else:
-                if abs(valy) > 0.5:
-                    sign = valy / abs(valy)
-                    valy = 0.5 * sign
-                #print('valuey',valy)
-                #ser.setposy(valy)
-
-                #(offset_x, offset_y) = (frame_center_x - center_x, frame_center_y - center_y)
-            #while center_x != frame_center_x and center_y != frame_center_y:  # while we are not centered in the box we defined
-                #if center_x: center_y  # if star within
 
 
             # Draw a rectangle around the object
@@ -200,7 +186,7 @@ while True:
         fps.stop()
 
         # Print info in each frame
-        info = [("Tracker", "csrt"), ("Success", "Yes" if success else "No"),
+        info = [("Tracker", "medianflow"), ("Success", "Yes" if success else "No"),
                 ("FPS:", "{:.2f}".format(fps.fps())), ("Position", position[0])]
         for (i, (k, v)) in enumerate(info):
             text = "{}:{}".format(k, v)
@@ -221,6 +207,7 @@ while True:
         state = 1
         box = cv2.selectROI(
             "Select the area", frame, fromCenter=False, showCrosshair=False)
+        time.sleep(1)
         tracker.init(frame, box)
         fps = FPS().start()
     elif key == ord("q"):
@@ -228,7 +215,7 @@ while True:
     elif key == ord("c"):
         box = None
         state = 0
-        tracker = OPENCV_OBJECT_TRACKERS["csrt"]()
+        tracker = OPENCV_OBJECT_TRACKERS["medianflow"]()
         position = deque()
 
     #writer.write(frame)
