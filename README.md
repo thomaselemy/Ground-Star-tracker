@@ -31,3 +31,26 @@ set higher resolution
 these commands dont seem to work https://docs.arducam.com/UVC-Camera/Adjust-the-minimum-exposure-time/
 
 use a library for arduino stepper control( AccelStepper) https://www.airspayce.com/mikem/arduino/AccelStepper/classAccelStepper.html
+
+
+**********************************
+new arduino code. 
+
+60,000 steps required to go 360 (0.006 deg a step)not including microstepping
+
+with microstepping(x 64)=3,840,000 
+
+calculated fov of camera=10.54deg
+
+number of steps in fov=1,756.67
+
+with microstepping accounted for=10,666.67
+
+pixels per degree=182.16 in horizontal fov 
+pixels per degree=102.47 in vertical fov 
+
+logic 
+
+start at zero position
+
+find object, distance from center 
