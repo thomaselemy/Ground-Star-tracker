@@ -11,6 +11,8 @@ import time
 #import pyserial
 #from buttons import create_GUI
 import serial
+from serial.tools import list_ports
+
 import simple_pid
 from tkinter import NW, Tk, Canvas, PhotoImage, Button
 
@@ -20,8 +22,39 @@ def photo_image(img):
     data = f'P6 {w} {h} 255 '.encode() + img[..., ::-1].tobytes()
     return PhotoImage(width=w, height=h, data=data, format='PPM')
 
+
+def serial_ports():
+    return [p.device for p in list_ports.comports()]
+
+
+# when the user selects one serial port from the combobox, this function will execute
+def on_select(event=None):
+    
+    COMPort = cb.get()
+    string_separator = "-"
+    COMPort = COMPort.split(string_separator, 1)[0]  # remove everything after '-' character
+    #COMPort = COMPort[:-1]  # remove last character of the string (which is a space)
+    SerialObj = serial.Serial(port=COMPort, baudrate=9600, timeout=0)
+    # readSerial() #start reading shit. DELETE. later to be placed in a button
+    # get selection from event
+    # print("event.widget:", event.widget.get())
+    # or get selection directly from combobox
+    print("opened port")
+
+    print(COMPort)
+    return SerialObj
+
+
 ##############################################################################
-SerialObj = serial.Serial('COM9', 9600) #open serial port
+#SerialObj = serial.Serial('COM9', 9600) #open serial port
+
+comPort_tk = Tk()
+cb = tkinter.ttk.Combobox(comPort_tk, values=serial_ports())
+cb.pack()
+# assign function to combobox
+cb.bind('<<ComboboxSelected>>', on_select)
+comPort_tk.mainloop()
+
 #serial_object = serial.Serial('/dev/tty' + str(port), baud)
 top = Tk()
 
