@@ -18,10 +18,10 @@ const int stepPin_focus = 4;  //3 for y, 4 for z
 const int enablePin = 8;
 
 int numberOfSteps = 5000;
-int smallsteps = 1000;
+int smallsteps = 500;
 int teststeps = 8000;
 int faststeps = 20000;
-int microsteps = 300;
+int microsteps = 80;
 //byte ledPin = 13;
 int pulseWidthMicros = 20;  // microseconds
 int millisbetweenSteps = 1; // milliseconds - or try 1000 for slower steps
