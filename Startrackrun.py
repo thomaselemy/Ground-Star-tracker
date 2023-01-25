@@ -230,7 +230,7 @@ if __name__ == '__main__':
 
                     # check if horizontal correction necessary
                 if horz_motorCommand:
-                    deltaX = 20  # THOMAS NEED TO DETERMINE THIS NUMBER BIG MOVEMENTS
+                    deltaX = 18  # THOMAS NEED TO DETERMINE THIS NUMBER BIG MOVEMENTS
                     move_duration = 0.2  # seconds. THOMAS NEED TO DETERMINE THIS
                     if tstart:
                         elapsed_duration = time.time() - tstart
@@ -269,7 +269,7 @@ if __name__ == '__main__':
 
                     # check if vertical correction necessary
                 if vert_motorCommand:
-                    deltaY = 20  # THOMAS NEED TO DETERMINE THIS NUMBER BIG MOVEMENTS
+                    deltaY = 18  # THOMAS NEED TO DETERMINE THIS NUMBER BIG MOVEMENTS
                     move_duration2 = 0.2  # seconds. THOMAS NEED TO DETERMINE THIS
                     if tstart2:
                         elapsed_duration2 = time.time() - tstart2
