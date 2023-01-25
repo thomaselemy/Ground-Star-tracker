@@ -24,10 +24,8 @@ Need to be able to use tkinter to select com port in windows.
 
 combine tkinter code to position telescope when not tracking
 
-Set exposure value for webcam 
+Set exposure value for webcam
 
 set higher resolution 
-
-these commands dont seem to work https://docs.arducam.com/UVC-Camera/Adjust-the-minimum-exposure-time/
 
 use a library for arduino stepper control( AccelStepper) https://www.airspayce.com/mikem/arduino/AccelStepper/classAccelStepper.html
