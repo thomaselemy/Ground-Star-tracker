@@ -13,7 +13,7 @@ Select com port from dropdown.
 close tkinter window. 
 tkinter window and video feed should open. 
 Hit "S" and draw bounding box around star/object. Space or enter to run tracking  
-https://www.youtube.com/watch?v=FB7B6Ej_Mbo
+
 Python code tries to center selected star in center of frame(pixels x, y) 
 
 Test image captured 1/24/2023
