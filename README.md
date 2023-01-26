@@ -7,25 +7,15 @@ Python code is for tracking of stars and sending commands. CSRT and medianflow s
 
 The current control method moves the telescope via serial commands. Up is "u", down is "d", etc. for left and right. the distances these move the telescope are are predefined in the arduino code via the number of steps to take. 
 
-Python code tries to center selected star in center of frame(pixels 320, 240) 
+Usage: connect webcam and microcontroller for reading serial inputs and motor control. 
+Run code or compiled .exe(im using pyinstaller). 
+Select com port from dropdown. 
+close tkinter window. 
+tkinter window and video feed should open. 
+Hit "S" and draw bounding box around star/object. Space or enter to run tracking  
 
+Python code tries to center selected star in center of frame(pixels x, y) 
 
-
-
-IDK if this is the best control method. the telescope arduino currently has predefined movement commands. Variable velocity control and may be a better control method. 
-
-Loosing tracking of a star or object(ie cloud blocking sky) stops movement. May be good idea to find apparent star velocity after a few minutes and use that to update movements.
-
-Issues:
-
-As the telescope approches center, number of moves to center camera on object to large and only hovers around center 
-
-Need to be able to use tkinter to select com port in windows.
-
-combine tkinter code to position telescope when not tracking
-
-Set exposure value for webcam
-
-set higher resolution 
+Test image captured 1/24/23 https://github.com/thomaselemy/Ground-Star-tracker/blob/main/Stack_16bits_782frames_748s.jpg
 
 use a library for arduino stepper control( AccelStepper) https://www.airspayce.com/mikem/arduino/AccelStepper/classAccelStepper.html
