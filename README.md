@@ -14,6 +14,8 @@ close tkinter window.
 tkinter window and video feed should open. 
 Hit "S" and draw bounding box around star/object. Space or enter to run tracking  
 
+https://user-images.githubusercontent.com/33559754/214774862-d7afd954-6276-44a0-b5c4-666938f6b212.mp4
+
 Python code tries to center selected star in center of frame(pixels x, y) 
 
 Test image captured 1/24/2023
