@@ -16,6 +16,6 @@ Hit "S" and draw bounding box around star/object. Space or enter to run tracking
 
 Python code tries to center selected star in center of frame(pixels x, y) 
 
- ![Stack_16bits_782frames_748s](https://user-images.githubusercontent.com/33559754/214767967-a20d18a1-c12f-4a5a-ac38-775e32d15f9e.jpg)
+ ![captured 1/24/23](https://user-images.githubusercontent.com/33559754/214767967-a20d18a1-c12f-4a5a-ac38-775e32d15f9e.jpg)
 
 use a library for arduino stepper control( AccelStepper) https://www.airspayce.com/mikem/arduino/AccelStepper/classAccelStepper.html
