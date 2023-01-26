@@ -16,6 +16,6 @@ Hit "S" and draw bounding box around star/object. Space or enter to run tracking
 
 Python code tries to center selected star in center of frame(pixels x, y) 
 
-Test image captured 1/24/23 https://github.com/thomaselemy/Ground-Star-tracker/blob/main/Stack_16bits_782frames_748s.jpg
+ ![Test image captured 1/24/23]https://github.com/thomaselemy/Ground-Star-tracker/blob/main/Stack_16bits_782frames_748s.jpg
 
 use a library for arduino stepper control( AccelStepper) https://www.airspayce.com/mikem/arduino/AccelStepper/classAccelStepper.html
